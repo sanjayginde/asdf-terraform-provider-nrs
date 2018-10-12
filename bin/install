@@ -19,7 +19,8 @@ install_provider() {
   echo "Downloading terraform-provider-nrs version ${version} from ${download_url}"
   if curl -fsL "${download_url}" -o "${download_path}"; then
     echo "Extracting terraform-provider-nrs archive"
-    tar xfz "${download_path}" -C "${install_path}" --strip 2 "terraform-provider-nrs/darwin-amd64"
+    mkdir ${install_path}/bin
+    tar xfz "${download_path}" -C "${install_path}/bin" --strip 2 "terraform-provider-nrs/darwin-amd64"
   else
     echo "Error: terraform-provider-nrs version ${version} not found" >&2
     exit 1
