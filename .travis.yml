@@ -1,0 +1,8 @@
+language: c
+script: asdf plugin-test ansible https://github.com/sanjayginde/asdf-ansible.git 'ansible --version'
+before_script:
+  - git clone https://github.com/asdf-vm/asdf.git asdf
+  - . asdf/asdf.sh
+os:
+  - linux
+  - osx

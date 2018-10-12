@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+# This is modeled after the asdf-hashicorp plugin:
+# https://github.com/Banno/asdf-hashicorp
+
+readonly TMP_DOWNLOAD_DIR="$(mktemp -d -t "asdf_terraform-provider-nrs_XXXXXX")"
+trap 'rm -rf "${TMP_DOWNLOAD_DIR?}"' EXIT
+
+install_provider() {
+  local install_type=$1
+  local version=$2
+  local install_path=$3
+
+  local -r download_url="$(get_download_url "${version}")"
+  local -r download_path="${TMP_DOWNLOAD_DIR}/$(get_filename "${version}")"
+
+  echo "install path: $install_path"
+
+  echo "Downloading terraform-provider-nrs version ${version} from ${download_url}"
+  if curl -fsL "${download_url}" -o "${download_path}"; then
+    echo "Extracting terraform-provider-nrs archive"
+    tar xfz "${download_path}" -C "${install_path}" --strip 2 "terraform-provider-nrs/darwin-amd64"
+  else
+    echo "Error: terraform-provider-nrs version ${version} not found" >&2
+    exit 1
+  fi
+}
+
+get_filename () {
+  local -r version="$1"
+  echo "terraform-provider-nrs-${version}.tar.gz"
+}
+
+get_download_url () {
+  local -r version="$1"
+  local -r filename="$(get_filename "${version}")"
+  echo "https://github.com/dollarshaveclub/terraform-provider-nrs/releases/download/${version}/${filename}"
+}
+
+install_provider $ASDF_INSTALL_TYPE $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
