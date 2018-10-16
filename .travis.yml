@@ -1,5 +1,6 @@
 language: c
-script: asdf plugin-test ansible https://github.com/sanjayginde/asdf-ansible.git 'ansible --version'
+script: asdf plugin-test ansible https://github.com/sanjayginde/asdf-terraform-provider-nrs.git 'terraform-provider-nrs'
+
 before_script:
   - git clone https://github.com/asdf-vm/asdf.git asdf
   - . asdf/asdf.sh
